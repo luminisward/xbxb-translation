@@ -6,8 +6,8 @@ app = Flask(__name__)
 def hello_world():
   return render_template('index.html')
 
-@app.route('/<language>/<query_string>')
-def query(language, query_string):
+@app.route('/<table_type>/<language>/<query_string>')
+def query(table_type,language, query_string):
   args = request.args
 
   # select language
@@ -42,8 +42,12 @@ def query(language, query_string):
 
   # query db
   t = Translation()
-  result = t.query(query_language, query_string, table, limit)
-  
+  result = []
+  if table_type == 'common':
+    result = t.query(query_language, query_string, table, limit)
+  elif table_type == 'dialogue':
+    result = t.query_dialogue(query_language, query_string, table, limit)
+
   # output format
   format = ''
   if 'format' in args.keys():
@@ -55,5 +59,4 @@ def query(language, query_string):
     for row in result:
       output.append(dict(zip(data_model, row)))
     return jsonify(output)
-  else:
-    return render_template('result_table.html', data=result)
+  return render_template('result_table.html', data=result)
