@@ -27,7 +27,12 @@
     <tbody>
       {% for row in data %}
       <tr>
-        {% for value in row %}
+        {% if row[-1] == 'all' %}
+        <td><a target="_blank" href="https://xenoblade.github.io/xb2_cn/bdat/common_ms/{{ row[0] }}.html">{{ row[0] }}</a></td>
+        {% else %}
+        <td><a target="_blank" href="https://xenoblade.github.io/xb2_cn/bdat/{{ row[0] }}.html">{{ row[0] }}</a></td>
+        {% endif %}
+        {% for value in row[1:] %}
         <td>{{ value }}</td>
         {% endfor %}
       </tr>
